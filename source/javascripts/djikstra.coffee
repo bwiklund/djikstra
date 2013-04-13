@@ -6,14 +6,18 @@
 @djik.Cell = class Cell
   constructor: (@x,@y)->
     @cost = 0
-    @score = Infinity
-    @done = false
+    @resetPathing()
 
   label: ->
     ""+(parseInt(@cost)||".")
 
+  resetPathing: ->
+    @done = false
+    @path = false
+    @score = Infinity
 
-#coast = 120
+
+
 
 
 @djik.solvePath = (cells) ->
