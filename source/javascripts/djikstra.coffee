@@ -31,14 +31,16 @@ class Solver
 
   solve: ->
 
-    open = []
-
+    @open = []
     @start.score = 0
-
     @c = @start
+    @traverse()
+    if !@c? then return
+    @backTrack()
 
-    
+    console.log "(ms) pathfinder:",new Date().getTime() - @starttime
 
+  traverse: ->
     while true
       if !@c? then return
       if @c == @dest
@@ -52,11 +54,11 @@ class Solver
             n = @cells[y][x]
             if n?
               if !n.done
-                if !(n in open)
-                  open.push n
+                if !(n in @open)
+                  @open.push n
           catch err
 
-      for n in open
+      for n in @open
         if n.cost == Infinity then n.done = true; continue;
         score = @c.score+Math.sqrt( Math.pow( @c.x-n.x,2 ) + Math.pow( @c.y-n.y,2 ) ) * n.cost
         #if (n.cost < coast && c.cost > coast) || (n.cost > coast && c.cost < coast)
@@ -69,18 +71,12 @@ class Solver
 
       @c.done = true
 
-      open = open.filter (n) -> n?
-      open = open.filter (n) -> !n.done
+      @open = @open.filter (n) -> n?
+      @open = @open.filter (n) -> !n.done
 
-      open.sort cell_sort
+      @open.sort cell_sort
 
-      @c = open[0]
-
-    if !@c? then return
-    
-    @backTrack()
-
-    console.log "(ms) pathfinder:",new Date().getTime() - @starttime
+      @c = @open[0]
 
   backTrack: ->
     while true
