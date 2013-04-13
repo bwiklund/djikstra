@@ -1,8 +1,9 @@
 
 
-perlin = new ClassicalNoise()
 
-class Cell
+
+
+@djik.Cell = class Cell
   constructor: (@x,@y)->
     @cost = 0
     @score = Infinity
@@ -12,53 +13,16 @@ class Cell
     ""+(parseInt(@cost)||".")
 
 
-
-coast = 120
-
+#coast = 120
 
 
-@pathfinder = {}
-@pathfinder.solve = ->
-  width = 30
-  cells = [0...width].map (y) -> [0...width].map (x)-> 
-    cell = new Cell(x,y)
-    # oceanic
-    ###
-    noise = 0.7*(perlin.noise(1+x*0.2,1+y*0.2,0)*0.5+0.5)
-    noise += 1.3*(perlin.noise(1+x*0.018,1+y*0.016,0)*0.5+0.5)
-    noise /= 2
-    cost = 10 + 240*noise
-    if coast < cost < 140
-      cost = coast
-    if cost < coast
-      safeness = (cost-coast)/coast
-      cost = 40 - safeness * 30
-    ###
-    # streets
-    cost = 2000
-    if x%6 == 0 then cost = 80
-    if y%6 == 0 then cost = 80
-    if y%6 == 0 and x%6 == 0 then cost = 150
-    if y == 20 then cost = 30
-    if cost == 2 then if Math.random() < 0.1 then cost = 10000
-    
-    cell.cost = cost
-    cell
-
-
-  # $scope.style = (cell) ->
-  #   style = ""
-  #   style += "color: rgba(0,#{parseInt(cell.cost-10)},0,1);"
-  #   style += "background: rgba(0,#{parseInt(cell.cost)},50,1)"
-  #   style += if cell.path then ";font-weight: bold; color: #fff" else ""
-
-
+@djik.solvePath = (cells) ->
 
   find_path = (start,dest) ->
     
-    rander = -> parseInt Math.random()*width
-    start = cells[0][0]#cells[rander()][rander()]
-    dest = cells[width-1][width-1]#cells[rander()][rander()]
+    rander = -> parseInt Math.random()*cells.length
+    start = cells[rander()][rander()]#cells[0][0]#
+    dest = cells[rander()][rander()]#cells[width-1][width-1]#
 
     starttime = new Date().getTime()
 
@@ -90,8 +54,8 @@ coast = 120
       for n in open
         if n.cost == Infinity then n.done = true; continue;
         score = c.score+Math.sqrt( Math.pow( c.x-n.x,2 ) + Math.pow( c.y-n.y,2 ) ) * n.cost
-        if (n.cost < coast && c.cost > coast) || (n.cost > coast && c.cost < coast)
-          score += 500
+        #if (n.cost < coast && c.cost > coast) || (n.cost > coast && c.cost < coast)
+        #  score += 500
         if score < n.score
           n.score = score
           n
