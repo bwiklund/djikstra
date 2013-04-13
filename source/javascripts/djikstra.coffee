@@ -47,36 +47,46 @@ class Solver
         @c.done = true
         break #we win
 
-      for y in [@c.y-1..@c.y+1]
-        for x in [@c.x-1..@c.x+1]
-          #if Math.abs(c.x-x)+Math.abs(c.y-y) == 2 then continue
-          try
-            n = @cells[y][x]
-            if n?
-              if !n.done
-                if !(n in @open)
-                  @open.push n
-          catch err
-
-      for n in @open
-        if n.cost == Infinity then n.done = true; continue;
-        score = @c.score+Math.sqrt( Math.pow( @c.x-n.x,2 ) + Math.pow( @c.y-n.y,2 ) ) * n.cost
-        #if (n.cost < coast && c.cost > coast) || (n.cost > coast && c.cost < coast)
-        #  score += 500
-        if score < n.score
-          n.score = score
-          n
-        else
-          undefined
-
+      @addOpenCells()
+      @scoreOpenCells()
       @c.done = true
 
-      @open = @open.filter (n) -> n?
-      @open = @open.filter (n) -> !n.done
-
-      @open.sort cell_sort
+      @filterAndSortOpenCells()
 
       @c = @open[0]
+
+
+  addOpenCells: ->
+    for y in [@c.y-1..@c.y+1]
+      for x in [@c.x-1..@c.x+1]
+        #if Math.abs(c.x-x)+Math.abs(c.y-y) == 2 then continue
+        try
+          n = @cells[y][x]
+          if n?
+            if !n.done
+              if !(n in @open)
+                @open.push n
+        catch err
+
+
+  scoreOpenCells: ->
+    for n in @open
+      if n.cost == Infinity then n.done = true; continue;
+      score = @c.score+Math.sqrt( Math.pow( @c.x-n.x,2 ) + Math.pow( @c.y-n.y,2 ) ) * n.cost
+      #if (n.cost < coast && c.cost > coast) || (n.cost > coast && c.cost < coast)
+      #  score += 500
+      if score < n.score
+        n.score = score
+        n
+      else
+        undefined
+
+
+  filterAndSortOpenCells: ->
+    @open = @open.filter (n) -> n?
+    @open = @open.filter (n) -> !n.done
+    @open.sort cell_sort
+
 
   backTrack: ->
     while true
