@@ -2,7 +2,8 @@ perlin = new ClassicalNoise()
 
 $ ->
 
-  width = 50
+  width = 100
+  scale = 5
 
   cells = [0...width].map (y) -> [0...width].map (x)->
     #oceanic 
@@ -48,7 +49,6 @@ $ ->
     onRender: ->
 
       @clear('#333')
-      scale = 10
       for row,y in cells
         for node,x in row
           g = ~~( 255 * node.cost )
