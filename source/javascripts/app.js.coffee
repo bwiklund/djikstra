@@ -30,18 +30,23 @@ $ ->
     cell = new @djik.Cell(x,y)
     cost = (perlin.noise(1+x*ms,1+y*ms,0)*0.5+0.5)
     cost *= (perlin.noise(1+x*ms*2,1+y*ms*2,10)*0.5+0.5)
+    cost += 0.2
     cell.cost = cost
     cell
 
 
   cq().framework(
     onStep: ->
-    onRender: ->
       for row,y in cells
         for node,x in row
+          if node.path
+            node.cost *= 0.8
+            node.cost += 0.05
           node.resetPathing()
+      djik.solvePath(cells)
 
-      cells = window.djik.solvePath(cells)
+    onRender: ->
+
       @clear('#333')
       scale = 10
       for row,y in cells
