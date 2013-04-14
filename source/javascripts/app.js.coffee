@@ -7,6 +7,7 @@ recPerlin = (x,y,z,n) ->
   noise
 
 
+
 class OurCell extends @djik.Cell
   init: ->
     ms = 0.03 
@@ -19,6 +20,8 @@ class OurCell extends @djik.Cell
 
   cost: ->
     Math.pow(2,2+@height) - @road
+
+
 
 $ ->
 
@@ -41,11 +44,15 @@ $ ->
       @clear('#333')
       for row,y in cells
         for node,x in row
-          g = ~~( 255 * node.color() )
-          color = if node.path then "#f9c" else cq.color(g,g,g,1.0).toRgba()
-          @fillStyle color
+
+          c = ~~ ( 255 * node.color() )
+          color = if node.path then cq.color(0,0,0,1) else cq.color(c,c,c,1.0)
+          #shade = cq.color(r,g,b,0.5)
+
           @save().scale(scale,scale)
-          @fillRect y,x,1,1
+          @fillStyle(color.toRgba()).fillRect x,y,0.98,0.98
+          #@fillStyle(shade.toRgba()).fillRect x,y-c*30,1,4
+          #@fillStyle(color.toRgba()).fillRect x,y-c*30,1,1
           @restore()
 
   ).appendTo("body")
