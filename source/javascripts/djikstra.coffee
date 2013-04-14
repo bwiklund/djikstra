@@ -8,9 +8,6 @@
 
   init: ->
 
-  #calculateHeuristic: (x,y) ->
-  #  @heuristic = 0.2*Math.sqrt( Math.pow(@x-x,2) + Math.pow(@y-y,2) )
-
   label: ->
     ""+(parseInt(@cost)||".")
 
@@ -25,12 +22,7 @@
 
 
 
-
-
 cell_sort = (a,b) -> 
-  # as = a.score + a.heuristic
-  # bs = b.score + b.heuristic
-  # as-bs
   a.score - b.score
 
 
@@ -46,10 +38,6 @@ class Solver
   rander: -> parseInt Math.random()*@cells.length
 
   solve: ->
-
-    # for row in @cells
-    #   for cell in row
-    #     cell.calculateHeuristic @dest.x, @dest.y
 
     @open = []
     @start.score = 0
