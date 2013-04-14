@@ -3,8 +3,10 @@
 
 @djik.Cell = class Cell
   constructor: (@x,@y)->
-    @cost = 0
     @resetPathing()
+    @init()
+
+  init: ->
 
   #calculateHeuristic: (x,y) ->
   #  @heuristic = 0.2*Math.sqrt( Math.pow(@x-x,2) + Math.pow(@y-y,2) )
@@ -17,6 +19,11 @@
     @path = false
     @score = Infinity
     #@heuristic = 0
+
+  cost: ->
+    1
+
+
 
 
 
@@ -78,8 +85,8 @@ class Solver
 
   scoreOpenCells: ->
     for n in @open
-      if n.cost == Infinity then n.done = true; continue;
-      score = @c.score + Math.sqrt( Math.pow( @c.x-n.x,2 ) + Math.pow( @c.y-n.y,2 ) ) * n.cost
+      if n.cost() == Infinity then n.done = true; continue;
+      score = @c.score + Math.sqrt( Math.pow( @c.x-n.x,2 ) + Math.pow( @c.y-n.y,2 ) ) * n.cost()
       #if (n.cost < coast && c.cost > coast) || (n.cost > coast && c.cost < coast)
       #  score += 500
       if score < n.score
