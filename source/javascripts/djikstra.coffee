@@ -85,7 +85,8 @@ class Solver
   filterAndSortOpenCells: ->
     #@open = @open.filter (n) -> n?
     @open = @open.filter (n) -> !n.done
-    @open.sort cell_sort
+    #if Math.random() < 0.05
+    #@open.sort cell_sort
 
 
   backTrack: ->
