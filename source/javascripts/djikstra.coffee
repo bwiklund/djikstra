@@ -22,8 +22,7 @@
 
 
 
-cell_sort = (a,b) -> 
-  a.score - b.score
+cell_sort = (a,b) -> a.score - b.score
 
 
 
@@ -108,5 +107,4 @@ class Solver
 
 
 @djik.solvePath = (cells) ->
-    
   new Solver(cells)
