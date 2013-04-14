@@ -1,8 +1,14 @@
-floormat
-========
+djikstra's city
+====
 
-An empty middleman project, set up with my favorites. Saves five minutes of setup.
+A javascript demo that uses Djikstra's algorithm to build a network of roads over terrain.
 
-- Coffeescript
-- Slim
-- Sass
+Setup:
+```
+bundle install
+```
+
+Run:
+```
+middleman server
+```
