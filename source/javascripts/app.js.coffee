@@ -18,7 +18,7 @@ class CityCell extends @djik.Cell
     @height - @road
 
   cost: ->
-    Math.max 0, @height - @road
+    Math.max 0.00001, @height - @road
 
 
 
@@ -41,24 +41,24 @@ class CitySimulator
     new djik.Solver(@cells,start,dest)
 
 
+
 $ ->
 
   city = new CitySimulator 80
-  scale = 5
-  cq(city.width*scale,city.width*scale).framework(
+  drawScale = 5
+
+  cq(city.width*drawScale,city.width*drawScale).framework(
 
     onStep: ->
       city.step()
 
     onRender: ->
-      @clear('#333')
+      @clear('#333').save().scale(drawScale,drawScale)
       for row,y in city.cells
         for node,x in row
           c = ~~ ( 255 * node.color() )
-          color = if node.path then cq.color(0,0,0,1) else cq.color(c,c,c,1.0) #
-          @save()
-          @scale(scale,scale)
+          color = if node.path then cq.color(0,0,0,1) else cq.color(c,c,c,1.0) #    
           @fillStyle(color.toRgba()).fillRect x,y,0.98,0.98
-          @restore()
+      @restore()
 
   ).appendTo("body")
