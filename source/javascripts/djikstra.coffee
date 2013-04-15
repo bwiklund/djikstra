@@ -54,37 +54,32 @@ class Solver
         @c.done = true
         break #we win
 
-      @addOpenCells()
-      @scoreOpenCells()
-      @filterAndSortOpenCells()
+      @addAndScoreNeighbors()
+      @sortOpenCells()
 
-      @c = @open[0]
+      @c = @open.shift()
 
 
-  addOpenCells: ->
+  addAndScoreNeighbors: ->
     for y in [@c.y-1..@c.y+1]
       for x in [@c.x-1..@c.x+1]
         if Math.abs(@c.x-x)+Math.abs(@c.y-y) == 2 then continue
         n = @cells[y]?[x]
-        if n? && !n.done && !(n in @open)
-          @open.push n
 
+        if n? && !n.done
+          if !(n in @open) then @open.push n
 
-  scoreOpenCells: ->
-    for n in @open
-      if n.cost() == Infinity then n.done = true; continue;
-      score = @c.score + Math.sqrt( Math.pow( @c.x-n.x,2 ) + Math.pow( @c.y-n.y,2 ) ) * n.cost()
-      #if (n.cost < coast && c.cost > coast) || (n.cost > coast && c.cost < coast)
-      #  score += 500
-      if score < n.score
-        n.score = score
+          if n.cost() == Infinity then n.done = true; continue;
+          score = @c.score + Math.sqrt( Math.pow( @c.x-n.x,2 ) + Math.pow( @c.y-n.y,2 ) ) * n.cost()
+          #if (n.cost < coast && c.cost > coast) || (n.cost > coast && c.cost < coast)
+          #  score += 500
+          if score < n.score
+            n.score = score
+
     @c.done = true
 
 
-  filterAndSortOpenCells: ->
-    #@open = @open.filter (n) -> n?
-    @open = @open.filter (n) -> !n.done
-    #if Math.random() < 0.05
+  sortOpenCells: ->
     @open.sort cell_sort
 
 

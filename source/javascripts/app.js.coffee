@@ -27,25 +27,27 @@ $ ->
 
   width = 80
   scale = 5
-  cells = [0...width].map (y) -> [0...width].map (x)-> new OurCell(x,y)
+  cells = [0...width].map (y) -> [0...width].map (x) -> new OurCell(x,y)
 
   cq(width*scale,width*scale).framework(
     onStep: ->
-      for row,y in cells
-        for node,x in row
-          node.road *= 0.995
-          if node.path
-            node.road += 0.01
-            #node.cost += 0.01
-          node.resetPathing()
-      djik.solvePath(cells)
+
+      for i in [0..0]
+        for row,y in cells
+          for node,x in row
+            node.road *= 0.995
+            if node.path
+              node.road += 0.02
+              #node.cost += 0.01
+            node.resetPathing()
+        djik.solvePath(cells)
 
     onRender: ->
       @clear('#333')
       for row,y in cells
         for node,x in row
           c = ~~ ( 255 * node.color() )
-          color = if node.path then cq.color(0,0,0,1) else cq.color(c,c,c,1.0)
+          color = if node.path then cq.color(0,0,0,1) else cq.color(c,c,c,1.0) #
           @save()
           @scale(scale,scale)
           @fillStyle(color.toRgba()).fillRect x,y,0.98,0.98
