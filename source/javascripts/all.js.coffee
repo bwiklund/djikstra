@@ -1,6 +1,6 @@
 # hello
-#= require ./bootstrap
-#= require ./perlin
-#= require ./djikstra
-#= require ./app
+#= require ./lib/bootstrap
+#= require ./lib/perlin
+#= require ./lib/djikstra
+#= require ./lib/app
 
