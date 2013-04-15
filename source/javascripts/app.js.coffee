@@ -22,34 +22,37 @@ class CityCell extends @djik.Cell
 
 
 
+class CitySimulator
+  constructor: (@width) ->
+    @cells = [0...@width].map (y) => [0...@width].map (x) -> new CityCell(x,y)
+
+  step: ->
+    for row,y in @cells
+      for node,x in row
+        node.road *= 0.997
+        if node.path
+          node.road += 0.013
+          #node.cost += 0.01
+        node.resetPathing()
+
+    randIndex = => Math.floor Math.random()*@width
+    start = @cells[randIndex()][randIndex()]
+    dest = @cells[randIndex()][randIndex()]
+    new djik.Solver(@cells,start,dest)
+
+
 $ ->
 
-  width = 80
+  city = new CitySimulator 80
   scale = 5
-  cells = [0...width].map (y) -> [0...width].map (x) -> new CityCell(x,y)
-
-  cq(width*scale,width*scale).framework(
+  cq(city.width*scale,city.width*scale).framework(
 
     onStep: ->
-      for i in [0..0]
-        for row,y in cells
-          for node,x in row
-            node.road *= 0.997
-            if node.path
-              node.road += 0.013
-              #node.cost += 0.01
-            node.resetPathing()
-
-
-
-        rander = -> parseInt Math.random()*width
-        start = cells[rander()][rander()]
-        dest = cells[rander()][rander()]
-        new djik.Solver(cells,start,dest)
+      city.step()
 
     onRender: ->
       @clear('#333')
-      for row,y in cells
+      for row,y in city.cells
         for node,x in row
           c = ~~ ( 255 * node.color() )
           color = if node.path then cq.color(0,0,0,1) else cq.color(c,c,c,1.0) #
