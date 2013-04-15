@@ -1,3 +1,4 @@
+cell_sort = (a,b) -> a.score - b.score
 
 
 
@@ -8,33 +9,19 @@
 
   init: ->
 
-  label: ->
-    ""+(parseInt(@cost)||".")
-
   resetPathing: ->
     @done = false
     @path = false
     @score = Infinity
-    #@heuristic = 0
 
-  cost: ->
-    1
+  cost: -> 1
 
 
 
-cell_sort = (a,b) -> a.score - b.score
-
-
-
-class Solver
-  constructor: (@cells) ->
-    @start = @cells[@rander()][@rander()]#cells[0][0]#
-    @dest = @cells[@rander()][@rander()]#cells[width-1][width-1]#
+@djik.Solver = class Solver
+  constructor: (@cells,@start,@dest) ->
     @starttime = new Date().getTime()
-
     @solve()
-
-  rander: -> parseInt Math.random()*@cells.length
 
   solve: ->
 
@@ -45,7 +32,7 @@ class Solver
     if !@c? then return
     @backTrack()
 
-    console.log "(ms) pathfinder:",new Date().getTime() - @starttime
+    #console.log "(ms) pathfinder:",new Date().getTime() - @starttime
 
   traverse: ->
     while true
@@ -67,12 +54,15 @@ class Solver
         n = @cells[y]?[x]
 
         if n? && !n.done
-          if !(n in @open) then @open.push n
 
-          if n.cost() == Infinity then n.done = true; continue;
-          score = @c.score + Math.sqrt( Math.pow( @c.x-n.x,2 ) + Math.pow( @c.y-n.y,2 ) ) * n.cost()
-          #if (n.cost < coast && c.cost > coast) || (n.cost > coast && c.cost < coast)
-          #  score += 500
+          if !(n in @open)
+            @open.push n
+
+          if n.cost() == Infinity
+            n.done = true
+            continue
+
+          score = @c.score + n.cost()#Math.sqrt( Math.pow( @c.x-n.x,2 ) + Math.pow( @c.y-n.y,2 ) ) * n.cost()
           if score < n.score
             n.score = score
 
@@ -100,6 +90,3 @@ class Solver
 
       @c = neig[0]
 
-
-@djik.solvePath = (cells) ->
-  new Solver(cells)
