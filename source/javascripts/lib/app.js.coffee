@@ -47,6 +47,7 @@ $ ->
   city = new CitySimulator 80
   drawScale = 5
 
+
   cq(city.width*drawScale,city.width*drawScale).framework(
 
     onStep: ->
@@ -57,8 +58,9 @@ $ ->
       for row,y in city.cells
         for node,x in row
           c = ~~ ( 255 * node.color() )
-          color = if node.path then cq.color(0,0,0,1) else cq.color(c,c,c,1.0) #    
-          @fillStyle(color.toRgba()).fillRect x,y,0.98,0.98
+          c = Math.min 255, Math.max 0, c
+          color = if node.path then cq.color([0,0,0,1]) else cq.color([c,c,c,1.0]) #    
+          @fillStyle(color.toHex()).fillRect x,y,0.98,0.98
       @restore()
 
   ).appendTo("body")
